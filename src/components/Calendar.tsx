@@ -58,7 +58,7 @@ export default function Calendar() {
         <div className="grid md:grid-cols-2">
 
           {/* IMAGE SECTION */}
-          <div className="relative h-[300px] md:h-full overflow-hidden">
+          <div className="relative h-[360px] md:h-full overflow-visible">
 
             {/* IMAGE */}
             <motion.img
@@ -72,7 +72,7 @@ export default function Calendar() {
 
               {/* SCROLLABLE NOTES AREA */}
               <div className="flex-1 overflow-y-auto scrollbar-none p-4">
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 auto-rows-[90px]">
 
                   {notes.slice(0, 6).map((item, index) => (
                     <div
