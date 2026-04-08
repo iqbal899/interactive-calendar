@@ -39,6 +39,9 @@ export default function Calendar() {
   currentMonth,
   calendarData,
 });
+
+  const hasMonthNote = !!calendarData.monthNote;
+
   useEffect(() => {
     const saved = localStorage.getItem("calendar-data");
     if (saved) setCalendarData(JSON.parse(saved));
@@ -105,20 +108,32 @@ dark:from-[#0a0f1f] dark:to-[#111827] p-4 transition-colors">
   </div>
 </div>
 
-            <div className="absolute inset-0 flex items-end p-6">
-              <div
-                onClick={handleMonthClick}
-                className="w-full bg-white/10 backdrop-blur-md rounded-xl p-4 cursor-pointer transition hover:bg-white/20 hover:scale-[1.02] border border-white/20"
-              >
-                <h1 className="text-white text-lg font-semibold">
-                  Plan Your Month
-                </h1>
-                <p className="text-white/80 text-sm mt-1">
-                  Click to add monthly notes
-                </p>
-              </div>
-            </div>
-            
+<div className="absolute inset-0 flex items-end p-6">
+  <div
+    onClick={handleMonthClick}
+    className="w-full bg-white/10 backdrop-blur-md rounded-xl p-4 cursor-pointer transition hover:bg-white/20 hover:scale-[1.02] border border-white/20"
+  >
+    {!hasMonthNote ? (
+      <>
+        <h1 className="text-white text-lg font-semibold">
+          Plan Your Month
+        </h1>
+        <p className="text-white/80 text-sm mt-1">
+          Click to add monthly notes
+        </p>
+      </>
+    ) : (
+      <>
+        <h1 className="text-white text-sm opacity-80">
+          Monthly Note
+        </h1>
+        <p className="text-white text-sm mt-1 line-clamp-2">
+          {calendarData.monthNote}
+        </p>
+      </>
+    )}
+  </div>
+</div>
 
           </div>
 
