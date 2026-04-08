@@ -4,12 +4,18 @@ import {
   startOfMonth,
   endOfMonth,
   eachDayOfInterval,
-  format,
   addMonths,
   subMonths,
 } from "date-fns";
 import DayCell from "./DayCell";
 import Header from "./Header";
+import {
+  getDateKey,
+  checkHasNote,
+  checkIsRangeNote,
+  findRangeMatch,
+} from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 export default function CalendarGrid({
   startDate,
@@ -19,10 +25,10 @@ export default function CalendarGrid({
   setEndDate,
   setSelectedDate,
   calendarData,
-  currentMonth,   
-  setCurrentMonth, 
+  currentMonth,
+  setCurrentMonth,
+  onClearRange,
 }: any) {
-
 
   const days = eachDayOfInterval({
     start: startOfMonth(currentMonth),
@@ -30,30 +36,27 @@ export default function CalendarGrid({
   });
 
   const handleClick = (day: Date) => {
-  const key = format(day, "yyyy-MM-dd");
+    const key = getDateKey(day);
 
-  const rangeMatch = calendarData.rangeNotes?.find((r: any) => {
-    return key >= r.start && key <= r.end;
-  });
+    const rangeMatch = findRangeMatch(calendarData, key);
 
-  if (rangeMatch) {
+    if (rangeMatch) {
+      setStartDate(new Date(rangeMatch.start));
+      setEndDate(new Date(rangeMatch.end));
+      setSelectedDate(day);
+      return;
+    }
 
-    setStartDate(new Date(rangeMatch.start));
-    setEndDate(new Date(rangeMatch.end));
     setSelectedDate(day);
-    return;
-  }
 
-  setSelectedDate(day);
-
-  if (!startDate || endDate) {
-    setStartDate(day);
-    setEndDate(null);
-  } else {
-    if (day < startDate) setStartDate(day);
-    else setEndDate(day);
-  }
-};
+    if (!startDate || endDate) {
+      setStartDate(day);
+      setEndDate(null);
+    } else {
+      if (day < startDate) setStartDate(day);
+      else setEndDate(day);
+    }
+  };
 
   return (
     <div>
@@ -63,15 +66,25 @@ export default function CalendarGrid({
         onNext={() => setCurrentMonth(addMonths(currentMonth, 1))}
       />
 
+      {startDate && endDate && (
+        <div className="mb-4 flex justify-end">
+          <Button
+  variant="outline"
+  size="sm"
+  onClick={onClearRange}
+  className=" rounded-xl border-red-400 text-red-600 hover:bg-red-100"
+>
+  Clear Range
+</Button>
+        </div>
+      )}
       <div className="grid grid-cols-7 gap-2">
         {days.map((day: Date) => {
-           const key = format(day, "yyyy-MM-dd");
+          const key = getDateKey(day);
 
-  const hasNote = calendarData.dateNotes?.[key]; 
+          const hasNote = checkHasNote(calendarData, key);
+          const isRangeNote = checkIsRangeNote(calendarData, key);
 
-  const isRangeNote = calendarData.rangeNotes?.some((r: any) => {
-    return key >= r.start && key <= r.end; 
-  });
 
           return (
             <DayCell

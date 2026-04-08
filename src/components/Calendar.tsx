@@ -20,6 +20,11 @@ export default function Calendar() {
     setEndDate(null);
   };
 
+  const handleClearRange = () => {
+  setStartDate(null);
+  setEndDate(null);
+};
+
   const [calendarData, setCalendarData] = useState<any>({
     monthNote: "",
     dateNotes: {},
@@ -53,7 +58,6 @@ export default function Calendar() {
               transition={{ duration: 0.4 }}
             />
 
-            {/* HEADER CARD */}
             <div className="absolute inset-0 flex items-end p-6">
               <div
                 onClick={handleMonthClick}
@@ -79,8 +83,9 @@ export default function Calendar() {
               setEndDate={setEndDate}
               setSelectedDate={setSelectedDate}
               calendarData={calendarData}
-              currentMonth={currentMonth}          
-              setCurrentMonth={setCurrentMonth}    
+              currentMonth={currentMonth}
+              setCurrentMonth={setCurrentMonth}
+              onClearRange={handleClearRange}
             />
           </div>
         </div>

@@ -2,6 +2,7 @@
 
 import { format, isSameDay } from "date-fns";
 import clsx from "clsx";
+import { getDateKey } from "@/lib/utils";
 
 export default function DayCell({
   day,
@@ -12,14 +13,15 @@ export default function DayCell({
   hasNote,
   isRangeNote,
 }: any) {
+
   const isSelected =
     selectedDate && isSameDay(day, selectedDate);
 
   const inSelectedRange =
-  startDate &&
-  endDate &&
-  format(day, "yyyy-MM-dd") >= format(startDate, "yyyy-MM-dd") &&
-  format(day, "yyyy-MM-dd") <= format(endDate, "yyyy-MM-dd");
+    startDate &&
+    endDate &&
+    getDateKey(day) >= getDateKey(startDate) &&
+    getDateKey(day) <= getDateKey(endDate);
 
   return (
     <div
@@ -27,11 +29,8 @@ export default function DayCell({
       className={clsx(
         "h-12 flex items-center justify-center rounded-xl cursor-pointer transition-all duration-200 text-gray-800 relative",
         "hover:scale-105 hover:bg-gray-200",
-
         isRangeNote && "bg-blue-100",
-
         inSelectedRange && "bg-blue-200",
-
         isSelected && "ring-2 ring-black"
       )}
     >

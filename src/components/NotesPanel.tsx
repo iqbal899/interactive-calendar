@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
+import { getNoteByContext, saveNoteLogic } from "@/lib/utils";
 
 export default function NotesPanel({
   selectedDate,
@@ -12,80 +13,32 @@ export default function NotesPanel({
 }: any) {
   const [note, setNote] = useState("");
 
-useEffect(() => {
+  useEffect(() => {
+    const result = getNoteByContext({
+      selectedDate,
+      startDate,
+      endDate,
+      calendarData,
+    });
 
-  if (startDate && endDate) {
-    const found = calendarData.rangeNotes?.find(
-      (r: any) =>
-        r.start === format(startDate, "yyyy-MM-dd") &&
-        r.end === format(endDate, "yyyy-MM-dd")
-    );
-
-    setNote(found?.note || "");
-    return;
-  }
-
-  if (selectedDate) {
-    const selectedKey = format(selectedDate, "yyyy-MM-dd");
-
-const rangeMatch = calendarData.rangeNotes?.find((r: any) => {
-  return selectedKey >= r.start && selectedKey <= r.end;
-});
-
-    if (rangeMatch) {
-      setNote(rangeMatch.note);
-      return;
-    }
-
-    if (calendarData.dateNotes?.[selectedKey]) {
-      setNote(calendarData.dateNotes[selectedKey]);
-      return;
-    }
-
-    setNote("");
-    return;
-  }
-
-  setNote(calendarData.monthNote || "");
-}, [selectedDate, startDate, endDate, calendarData]);
+    setNote(result);
+  }, [selectedDate, startDate, endDate, calendarData]);
 
   const saveNote = () => {
-    console.log("Saving note...", {
+    const updated = saveNoteLogic({
       selectedDate,
       startDate,
       endDate,
       note,
+      calendarData,
     });
 
-    let updated = { ...calendarData };
-
-    if (startDate && endDate) {
-      const range = {
-        start: format(startDate, "yyyy-MM-dd"),
-        end: format(endDate, "yyyy-MM-dd"),
-        note,
-      };
-
-      updated.rangeNotes = [
-        ...updated.rangeNotes.filter(
-          (r: any) =>
-            !(r.start === range.start && r.end === range.end)
-        ),
-        range,
-      ];
-    } else if (selectedDate) {
-      const key = format(selectedDate, "yyyy-MM-dd");
-      updated.dateNotes[key] = note;
-    } else {
-      updated.monthNote = note;
-    }
-
     setCalendarData({ ...updated });
-
     localStorage.setItem("calendar-data", JSON.stringify(updated));
 
     alert("Note saved ");
   };
+  
 
   return (
     <div className="p-6 border-t bg-white">
@@ -100,10 +53,21 @@ const rangeMatch = calendarData.rangeNotes?.find((r: any) => {
       </p>
 
       <textarea
-        className="w-full rounded-xl border p-3"
-        rows={3}
+        ref={(el) => {
+          if (el) {
+            el.style.height = "auto";
+            el.style.height = el.scrollHeight + "px";
+          }
+        }}
+        className="w-full rounded-xl border p-3 resize-none overflow-hidden focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+        placeholder="Write your notes..."
         value={note}
-        onChange={(e) => setNote(e.target.value)}
+        onChange={(e) => {
+          setNote(e.target.value);
+          const target = e.target as HTMLTextAreaElement;
+          target.style.height = "auto";
+          target.style.height = target.scrollHeight + "px";
+        }}
       />
 
       <button
