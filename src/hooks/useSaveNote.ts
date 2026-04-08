@@ -1,4 +1,4 @@
-import { getDateKey } from "@/lib/utils";
+import { getDateKey, findRangeMatch } from "@/lib/utils";
 import toast from "react-hot-toast";
 
 export const useSaveNote = ({
@@ -26,16 +26,36 @@ export const useSaveNote = ({
         ),
         range,
       ];
-    } else if (selectedDate) {
-      const key = getDateKey(selectedDate);
-      updated.dateNotes[key] = note;
-    } else {
-      updated.monthNote = note;
+
+      setCalendarData({ ...updated });
+      localStorage.setItem("calendar-data", JSON.stringify(updated));
+      toast.success("Range note saved");
+      return;
     }
+
+    if (selectedDate) {
+      const key = getDateKey(selectedDate);
+
+      const rangeMatch = findRangeMatch(calendarData, key);
+
+      if (rangeMatch) {
+        toast.error("This date is part of a range note");
+        return;
+      }
+
+      updated.dateNotes[key] = note;
+
+      setCalendarData({ ...updated });
+      localStorage.setItem("calendar-data", JSON.stringify(updated));
+      toast.success("Date note saved");
+      return;
+    }
+
+    updated.monthNote = note;
 
     setCalendarData({ ...updated });
     localStorage.setItem("calendar-data", JSON.stringify(updated));
-    toast.success("Note saved!");
+    toast.success("Month note saved");
   };
 
   return { saveNote };
