@@ -1,7 +1,7 @@
 "use client";
 
 import { format } from "date-fns";
-import { Button } from "@/components/ui/button";
+import { Button } from "./ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function Header({ currentMonth, onPrev, onNext }: any) {
