@@ -25,56 +25,50 @@ export const useMonthNotesGrid = ({
         }
     );
 
+    (calendarData.rangeNotes || []).forEach((r: any) => {
+        const start = new Date(r.start);
+        const end = new Date(r.end);
 
+        const startMonth = start.getMonth();
+        const startYear = start.getFullYear();
 
-(calendarData.rangeNotes || []).forEach((r: any) => {
-  const start = new Date(r.start);
-  const end = new Date(r.end);
+        const currentMonthIndex = currentMonth.getMonth();
+        const currentYear = currentMonth.getFullYear();
 
-  const startMonth = start.getMonth();
-  const startYear = start.getFullYear();
+        const isStartMonth =
+            startMonth === currentMonthIndex &&
+            startYear === currentYear;
 
-  const currentMonthIndex = currentMonth.getMonth();
-  const currentYear = currentMonth.getFullYear();
+        const startMonthDate = new Date(startYear, startMonth, 1);
+        const startMonthCount = getMonthNotesCount(calendarData, startMonthDate);
 
-  // Check if this is the starting month
-  const isStartMonth =
-    startMonth === currentMonthIndex &&
-    startYear === currentYear;
+        if (startMonthCount < 6) {
+            if (isStartMonth) {
+                notes.push({
+                    type: "range",
+                    start,
+                    end,
+                    date: start,
+                    note: r.note,
+                });
+            }
+            return;
+        }
 
-  //  Count notes in start month
-  const startMonthDate = new Date(startYear, startMonth, 1);
-  const startMonthCount = getMonthNotesCount(calendarData, startMonthDate);
+        const overlaps =
+            start <= new Date(currentYear, currentMonthIndex + 1, 0) &&
+            end >= new Date(currentYear, currentMonthIndex, 1);
 
-  // CASE 1: Start month has space → show ONLY there
-  if (startMonthCount < 6) {
-    if (isStartMonth) {
-      notes.push({
-        type: "range",
-        start,
-        end,
-        date: start,
-        note: r.note,
-      });
-    }
-    return;
-  }
-
-  //  CASE 2: Start month full → allow next month
-  const overlaps =
-    start <= new Date(currentYear, currentMonthIndex + 1, 0) &&
-    end >= new Date(currentYear, currentMonthIndex, 1);
-
-  if (overlaps) {
-    notes.push({
-      type: "range",
-      start,
-      end,
-      date: start,
-      note: r.note,
+        if (overlaps) {
+            notes.push({
+                type: "range",
+                start,
+                end,
+                date: start,
+                note: r.note,
+            });
+        }
     });
-  }
-});
 
     // sort by date
     notes.sort((a, b) => a.date - b.date);
