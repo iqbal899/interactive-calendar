@@ -6,7 +6,7 @@ import { useSaveNote } from "@/hooks/useSaveNote";
 import { useDeleteNote } from "@/hooks/useDeleteNote";
 
 export default function NotesPanel(props: any) {
-  const { selectedDate, startDate, endDate  , onClearRange} = props;
+  const { selectedDate, startDate, endDate } = props;
 
   const { note, setNote } = useNoteState(props);
 
@@ -30,34 +30,35 @@ export default function NotesPanel(props: any) {
       </p>
 
       <textarea
-        className="w-full rounded-xl border p-3 resize-none overflow-hidden"
-        value={note}
-        onChange={(e) => setNote(e.target.value)}
-      />
+  rows={1}
+  className="w-full rounded-xl border border-gray-200 p-3 resize-none overflow-hidden focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200"
+  placeholder="Write your notes..."
+  value={note}
+  onChange={(e) => {
+    setNote(e.target.value);
+
+    const el = e.target;
+    el.style.height = "auto";
+    el.style.height = el.scrollHeight + "px";
+  }}
+/>
 
       <div className="flex gap-3 mt-3">
-        <button
-          onClick={saveNote}
-          className="px-5 py-2 rounded-xl bg-blue-500 text-white"
-        >
-          Save
-        </button>
+        {/* SAVE */}
+  <button
+    onClick={saveNote}
+    className="px-4 py-2 rounded-lg bg-black text-white text-sm font-medium hover:bg-gray-800 transition"
+  >
+    Save
+  </button>
 
-        <button
-          onClick={deleteNote}
-          className="px-5 py-2 rounded-xl bg-red-500 text-white"
-        >
-          Delete
-        </button>
-
-        {startDate && endDate && (
-    <button
-      onClick={onClearRange}
-      className="px-5 py-2 rounded-xl bg-gray-300 text-gray-800 hover:bg-gray-400"
-    >
-      Clear Range
-    </button>
-  )}
+  {/* DELETE */}
+  <button
+    onClick={deleteNote}
+    className="px-4 py-2 rounded-lg text-red-500 text-sm font-medium hover:bg-red-50 transition"
+  >
+    Delete
+  </button>
 
       </div>
     </div>

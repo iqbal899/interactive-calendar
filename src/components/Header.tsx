@@ -1,24 +1,49 @@
 "use client";
 
 import { format } from "date-fns";
-import { Button } from "./ui/button";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
 
-export default function Header({ currentMonth, onPrev, onNext }: any) {
+export default function Header({
+  currentMonth,
+  onPrev,
+  onNext,
+  onClearRange,
+  showClear,
+}: any) {
   return (
-    <div className="flex justify-between items-center mb-6">
-      
+    <div className="relative flex items-center justify-between mb-6">
+
+      {/* LEFT */}
       <Button variant="outline" size="icon" onClick={onPrev}>
         <ChevronLeft className="w-4 h-4" />
       </Button>
 
-      <h2 className="text-lg font-semibold">
+      {/* CENTER */}
+      <h2 className="absolute left-1/2 -translate-x-1/2 text-lg font-semibold pointer-events-none">
         {format(currentMonth, "MMMM yyyy")}
       </h2>
 
-      <Button variant="outline" size="icon" onClick={onNext}>
-        <ChevronRight className="w-4 h-4" />
-      </Button>
+      {/* RIGHT */}
+     <div className="flex items-center gap-2">
+
+  {showClear && (
+    <Button
+      variant="outline"
+      size="sm"
+      onClick={onClearRange}
+      className="gap-1 text-red-500 border-red-200 hover:bg-red-50"
+    >
+      <X className="w-3 h-3" />
+      Clear
+    </Button>
+  )}
+
+  <Button variant="outline" size="icon" onClick={onNext}>
+    <ChevronRight className="w-4 h-4" />
+  </Button>
+
+</div>
     </div>
   );
 }

@@ -85,6 +85,7 @@ export default function Calendar() {
               calendarData={calendarData}
               currentMonth={currentMonth}
               setCurrentMonth={setCurrentMonth}
+              onClearRange={handleClearRange}
             />
           </div>
         </div>
@@ -99,7 +100,6 @@ export default function Calendar() {
           setStartDate={setStartDate}
           setEndDate={setEndDate}
           setSelectedDate={setSelectedDate}
-          onClearRange={handleClearRange}
         />
       </motion.div>
     </div>
