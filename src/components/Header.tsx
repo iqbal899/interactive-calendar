@@ -24,7 +24,7 @@ export default function Header({
   <ChevronLeft className="w-4 h-4 text-gray-800 dark:text-gray-200" />
 </Button>
       {/* CENTER */}
-      <h2 className="absolute left-1/2 -translate-x-1/2 text-lg font-semibold text-gray-900 dark:text-whitepointer-events-none">
+      <h2 className="absolute left-1/2 -translate-x-1/2 text-lg font-semibold text-gray-900 dark:text-whitepointer-events-none dark:text-white">
         {format(currentMonth, "MMMM yyyy")}
       </h2>
 
