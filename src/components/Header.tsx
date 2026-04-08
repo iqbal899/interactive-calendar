@@ -32,16 +32,21 @@ export default function Header({
      <div className="flex items-center gap-2">
 
   {showClear && (
-    <Button
-      variant="outline"
-      size="sm"
-      onClick={onClearRange}
-      className="gap-1 text-red-500 border-red-200 hover:bg-red-50"
-    >
-      <X className="w-3 h-3" />
-      Clear
-    </Button>
-  )}
+  <Button
+    variant="outline"
+    size="sm"
+    onClick={onClearRange}
+    className="
+      gap-1
+      border-transparent text-red-600 hover:bg-gray-100
+      dark:border-transparent dark:text-red-400 dark:hover:bg-gray-800
+      transition-colors
+    "
+  >
+    <X className="w-3 h-3" />
+    Clear
+  </Button>
+)}
 
   <Button
   variant="outline"
