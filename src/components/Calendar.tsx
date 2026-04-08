@@ -6,6 +6,9 @@ import NotesPanel from "./NotesPanel";
 import { motion } from "framer-motion";
 import monthImages from "@/lib/monthImages";
 
+import { useMonthNotesGrid } from "@/hooks/useMonthNotesGrid";
+
+
 export default function Calendar() {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
@@ -31,6 +34,11 @@ export default function Calendar() {
     rangeNotes: [],
   });
 
+
+  const notes = useMonthNotesGrid({
+  currentMonth,
+  calendarData,
+});
   useEffect(() => {
     const saved = localStorage.getItem("calendar-data");
     if (saved) setCalendarData(JSON.parse(saved));
@@ -64,6 +72,38 @@ dark:from-[#0a0f1f] dark:to-[#111827] p-4 transition-colors">
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.4 }}
             />
+            <div className="absolute inset-0 p-4 overflow-y-auto">
+  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+    
+    {notes.slice(0, 12).map((item, index) => (
+      <div
+        key={index}
+        className="
+          bg-black/50 backdrop-blur-md text-white
+          rounded-lg p-3
+          h-[90px]
+          flex flex-col justify-between
+          border border-white/10
+          shadow-md
+          hover:scale-[1.02]
+          transition
+        "
+      >
+        {/* DATE */}
+        <p className="text-[10px] opacity-70">
+          {item.date.getDate()}{" "}
+          {item.date.toLocaleString("default", { month: "short" })}
+        </p>
+
+        {/* NOTE */}
+        <p className="text-xs line-clamp-3">
+          {item.note}
+        </p>
+      </div>
+    ))}
+
+  </div>
+</div>
 
             <div className="absolute inset-0 flex items-end p-6">
               <div
@@ -78,6 +118,8 @@ dark:from-[#0a0f1f] dark:to-[#111827] p-4 transition-colors">
                 </p>
               </div>
             </div>
+            
+
           </div>
 
           {/* CALENDAR */}

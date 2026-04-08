@@ -15,6 +15,10 @@ export default function NotesPanel(props: any) {
 
   const { dark, toggleTheme } = useTheme();
 
+  const MAX_CHARS = 40;
+  
+const charCount = note.length;
+
   const { saveNote } = useSaveNote({
     ...props,
     note,
@@ -34,19 +38,36 @@ export default function NotesPanel(props: any) {
             : "Monthly Notes"}
       </p>
 
-      <textarea
-        rows={1}
-        className="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white p-3 resize-none overflow-hidden focus:outline-none focus:ring-2 focus:ring-blue-100 transition-all duration-200"
-        placeholder="Write your notes..."
-        value={note}
-        onChange={(e) => {
-          setNote(e.target.value);
+     
 
-          const el = e.target;
-          el.style.height = "auto";
-          el.style.height = el.scrollHeight + "px";
-        }}
-      />
+<textarea
+  rows={1}
+  placeholder={`Write your notes... (max ${MAX_CHARS} characters)`}
+  className="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white p-3 resize-none overflow-hidden focus:outline-none focus:ring-2 focus:ring-blue-100 transition-all duration-200"
+  value={note}
+  onChange={(e) => {
+    const text = e.target.value;
+
+    const trimmedText = text.slice(0, MAX_CHARS);
+    setNote(trimmedText);
+
+    // auto expand
+    const el = e.target;
+    el.style.height = "auto";
+    el.style.height = el.scrollHeight + "px";
+  }}
+/>
+
+
+<p
+  className={`text-xs mt-1 text-right ${
+    charCount > MAX_CHARS - 20
+      ? "text-red-500"
+      : "text-gray-400"
+  }`}
+>
+  {charCount}/{MAX_CHARS} characters
+</p>
 
       <div className="flex gap-3 mt-3">
         {/* SAVE */}
