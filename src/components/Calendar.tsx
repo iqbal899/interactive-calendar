@@ -36,9 +36,9 @@ export default function Calendar() {
 
 
   const notes = useMonthNotesGrid({
-  currentMonth,
-  calendarData,
-});
+    currentMonth,
+    calendarData,
+  });
 
   const hasMonthNote = !!calendarData.monthNote;
 
@@ -55,12 +55,12 @@ dark:from-[#0a0f1f] dark:to-[#111827] p-4 transition-colors">
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         className="
-  w-full max-w-6xl overflow-hidden
-  md:rounded-3xl
-  bg-white dark:bg-[#0b1220]
-  shadow-lg dark:shadow-black/40
-  transition-colors
-"
+                    w-full max-w-6xl overflow-hidden
+                    md:rounded-3xl
+                    bg-white dark:bg-[#0b1220]
+                    shadow-lg dark:shadow-black/40
+                    transition-colors
+                  "
       >
         <div className="grid md:grid-cols-2">
 
@@ -76,12 +76,12 @@ dark:from-[#0a0f1f] dark:to-[#111827] p-4 transition-colors">
               transition={{ duration: 0.4 }}
             />
             <div className="absolute inset-0 p-4 overflow-y-auto">
-  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-    
-    {notes.slice(0, 12).map((item, index) => (
-      <div
-        key={index}
-        className="
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+
+                {notes.slice(0, 12).map((item, index) => (
+                  <div
+                    key={index}
+                    className="
           bg-black/50 backdrop-blur-md text-white
           rounded-lg p-3
           h-[90px]
@@ -91,49 +91,49 @@ dark:from-[#0a0f1f] dark:to-[#111827] p-4 transition-colors">
           hover:scale-[1.02]
           transition
         "
-      >
-        {/* DATE */}
-        <p className="text-[10px] opacity-70">
-          {item.date.getDate()}{" "}
-          {item.date.toLocaleString("default", { month: "short" })}
-        </p>
+                  >
+                    {/* DATE */}
+                    <p className="text-[10px] opacity-70">
+                      {item.date.getDate()}{" "}
+                      {item.date.toLocaleString("default", { month: "short" })}
+                    </p>
 
-        {/* NOTE */}
-        <p className="text-xs line-clamp-3">
-          {item.note}
-        </p>
-      </div>
-    ))}
+                    {/* NOTE */}
+                    <p className="text-xs line-clamp-3">
+                      {item.note}
+                    </p>
+                  </div>
+                ))}
 
-  </div>
-</div>
+              </div>
+            </div>
 
-<div className="absolute inset-0 flex items-end p-6">
-  <div
-    onClick={handleMonthClick}
-    className="w-full bg-white/10 backdrop-blur-md rounded-xl p-4 cursor-pointer transition hover:bg-white/20 hover:scale-[1.02] border border-white/20"
-  >
-    {!hasMonthNote ? (
-      <>
-        <h1 className="text-white text-lg font-semibold">
-          Plan Your Month
-        </h1>
-        <p className="text-white/80 text-sm mt-1">
-          Click to add monthly notes
-        </p>
-      </>
-    ) : (
-      <>
-        <h1 className="text-white text-sm opacity-80">
-          Monthly Note
-        </h1>
-        <p className="text-white text-sm mt-1 line-clamp-2">
-          {calendarData.monthNote}
-        </p>
-      </>
-    )}
-  </div>
-</div>
+            <div className="absolute inset-0 flex items-end p-6">
+              <div
+                onClick={handleMonthClick}
+                className="w-full bg-white/10 backdrop-blur-md rounded-xl p-4 cursor-pointer transition hover:bg-white/20 hover:scale-[1.02] border border-white/20"
+              >
+                {!hasMonthNote ? (
+                  <>
+                    <h1 className="text-white text-lg font-semibold">
+                      Plan Your Month
+                    </h1>
+                    <p className="text-white/80 text-sm mt-1">
+                      Click to add monthly notes
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <h1 className="text-white text-sm opacity-80">
+                      Monthly Note
+                    </h1>
+                    <p className="text-white text-sm mt-1 line-clamp-2">
+                      {calendarData.monthNote}
+                    </p>
+                  </>
+                )}
+              </div>
+            </div>
 
           </div>
 
@@ -164,6 +164,7 @@ dark:from-[#0a0f1f] dark:to-[#111827] p-4 transition-colors">
           setStartDate={setStartDate}
           setEndDate={setEndDate}
           setSelectedDate={setSelectedDate}
+          currentMonth={currentMonth}
         />
       </motion.div>
     </div>

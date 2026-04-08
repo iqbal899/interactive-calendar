@@ -64,7 +64,7 @@ export default function CalendarGrid({
         onPrev={() => setCurrentMonth(subMonths(currentMonth, 1))}
         onNext={() => setCurrentMonth(addMonths(currentMonth, 1))}
         onClearRange={onClearRange}
-  showClear={startDate && endDate}
+        showClear={startDate && endDate}
       />
 
       <div className="grid grid-cols-7 gap-2">

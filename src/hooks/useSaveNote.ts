@@ -1,62 +1,73 @@
-import { getDateKey, findRangeMatch } from "@/lib/utils";
+import { getDateKey, findRangeMatch, getMonthNotesCount } from "@/lib/utils";
 import toast from "react-hot-toast";
 
 export const useSaveNote = ({
-  selectedDate,
-  startDate,
-  endDate,
-  note,
-  calendarData,
-  setCalendarData,
+    selectedDate,
+    startDate,
+    endDate,
+    note,
+    calendarData,
+    setCalendarData,
+    currentMonth,
 }: any) => {
-  const saveNote = () => {
-    let updated = { ...calendarData };
+    const saveNote = () => {
+        let updated = { ...calendarData };
 
-    if (startDate && endDate) {
-      const range = {
-        start: getDateKey(startDate),
-        end: getDateKey(endDate),
-        note,
-      };
+        // LIMIT CHECK (ONLY FOR DATE + RANGE)
+        if (selectedDate || (startDate && endDate)) {
+            const count = getMonthNotesCount(calendarData, currentMonth);
 
-      updated.rangeNotes = [
-        ...updated.rangeNotes.filter(
-          (r: any) =>
-            !(r.start === range.start && r.end === range.end)
-        ),
-        range,
-      ];
+            if (count >= 6) {
+                toast.error("Maximum 6 notes allowed for this month");
+                return;
+            }
+        }
 
-      setCalendarData({ ...updated });
-      localStorage.setItem("calendar-data", JSON.stringify(updated));
-      toast.success("Range note saved");
-      return;
-    }
+        if (startDate && endDate) {
+            const range = {
+                start: getDateKey(startDate),
+                end: getDateKey(endDate),
+                note,
+            };
 
-    if (selectedDate) {
-      const key = getDateKey(selectedDate);
+            updated.rangeNotes = [
+                ...updated.rangeNotes.filter(
+                    (r: any) =>
+                        !(r.start === range.start && r.end === range.end)
+                ),
+                range,
+            ];
 
-      const rangeMatch = findRangeMatch(calendarData, key);
+            setCalendarData({ ...updated });
+            localStorage.setItem("calendar-data", JSON.stringify(updated));
+            toast.success("Range note saved");
+            return;
+        }
 
-      if (rangeMatch) {
-        toast.error("This date is part of a range note");
-        return;
-      }
+        if (selectedDate) {
+            const key = getDateKey(selectedDate);
 
-      updated.dateNotes[key] = note;
+            const rangeMatch = findRangeMatch(calendarData, key);
 
-      setCalendarData({ ...updated });
-      localStorage.setItem("calendar-data", JSON.stringify(updated));
-      toast.success("Date note saved");
-      return;
-    }
+            if (rangeMatch) {
+                toast.error("This date is part of a range note");
+                return;
+            }
 
-    updated.monthNote = note;
+            updated.dateNotes[key] = note;
 
-    setCalendarData({ ...updated });
-    localStorage.setItem("calendar-data", JSON.stringify(updated));
-    toast.success("Month note saved");
-  };
+            setCalendarData({ ...updated });
+            localStorage.setItem("calendar-data", JSON.stringify(updated));
+            toast.success("Date note saved");
+            return;
+        }
 
-  return { saveNote };
+        updated.monthNote = note;
+
+        setCalendarData({ ...updated });
+        localStorage.setItem("calendar-data", JSON.stringify(updated));
+        toast.success("Month note saved");
+    };
+
+    return { saveNote };
 };

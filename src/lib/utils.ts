@@ -31,3 +31,28 @@ export const findRangeMatch = (calendarData: any, key: string) => {
   });
 };
 
+export const getMonthNotesCount = (calendarData: any, currentMonth: Date) => {
+  const month = currentMonth.getMonth();
+  const year = currentMonth.getFullYear();
+
+  let count = 0;
+
+  // 🔴 date notes
+  Object.keys(calendarData.dateNotes || {}).forEach((key) => {
+    const d = new Date(key);
+    if (d.getMonth() === month && d.getFullYear() === year) {
+      count++;
+    }
+  });
+
+  // 🟦 range notes (count each range as 1)
+  (calendarData.rangeNotes || []).forEach((r: any) => {
+    const start = new Date(r.start);
+    if (start.getMonth() === month && start.getFullYear() === year) {
+      count++;
+    }
+  });
+
+  return count;
+};
+
