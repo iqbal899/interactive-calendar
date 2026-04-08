@@ -1,3 +1,5 @@
+"use client";
+
 import { getDateKey } from "@/lib/utils";
 import toast from "react-hot-toast";
 
@@ -10,6 +12,7 @@ export const useDeleteNote = ({
   setStartDate,
   setEndDate,
   setSelectedDate,
+  currentMonth, 
 }: any) => {
   const deleteNote = () => {
     let updated = { ...calendarData };
@@ -25,18 +28,22 @@ export const useDeleteNote = ({
       setStartDate(null);
       setEndDate(null);
       setSelectedDate(null);
-    } else if (selectedDate) {
+    }
+
+    else if (selectedDate) {
       const key = getDateKey(selectedDate);
       delete updated.dateNotes[key];
-    } else {
-      updated.monthNote = "";
+    }
+
+    else {
+      const monthKey = `${currentMonth.getFullYear()}-${currentMonth.getMonth()}`;
+      delete updated.monthNotes[monthKey];
     }
 
     setCalendarData({ ...updated });
     localStorage.setItem("calendar-data", JSON.stringify(updated));
-     toast.error("Note deleted!");
+    toast.error("Note deleted!");
   };
 
- 
   return { deleteNote };
 };

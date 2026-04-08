@@ -31,12 +31,14 @@ export default function NotesPanel(props: any) {
   const { deleteNote } = useDeleteNote({
     ...props,
     note: safeNote,
+    currentMonth,
   });
 
   const isEmpty = !safeNote.trim();
   const hasExistingNote = !!safeNote.trim();
 
   const monthCount = getMonthNotesCount(calendarData, currentMonth);
+  const isRangeOrDate = selectedDate || (startDate && endDate);
   const isLimitReached = monthCount >= 6;
 
   return (
@@ -75,8 +77,8 @@ export default function NotesPanel(props: any) {
       {/* CHAR COUNT */}
       <p
         className={`text-xs mt-1 text-right ${charCount > MAX_CHARS - 10
-            ? "text-red-500"
-            : "text-gray-400"
+          ? "text-red-500"
+          : "text-gray-400"
           }`}
       >
         {charCount}/{MAX_CHARS} characters
@@ -95,14 +97,14 @@ export default function NotesPanel(props: any) {
         {/* SAVE */}
         <button
           onClick={saveNote}
-          disabled={isEmpty || isLimitReached}
+          disabled={isEmpty || (isRangeOrDate && isLimitReached)}
           className={`
-            px-4 py-2 rounded-lg text-sm font-medium transition
-            ${isEmpty || isLimitReached
+              px-4 py-2 rounded-lg text-sm font-medium transition
+              ${isEmpty || (isRangeOrDate && isLimitReached)
               ? "bg-gray-300 dark:bg-gray-700 text-gray-500 cursor-not-allowed"
               : "bg-black text-white dark:bg-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200"
             }
-          `}
+  `}
         >
           Save
         </button>

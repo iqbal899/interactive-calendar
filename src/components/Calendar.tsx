@@ -27,7 +27,7 @@ export default function Calendar() {
   };
 
   const [calendarData, setCalendarData] = useState<any>({
-    monthNote: "",
+    monthNotes: {},
     dateNotes: {},
     rangeNotes: [],
   });
@@ -37,7 +37,9 @@ export default function Calendar() {
     calendarData,
   });
 
-  const hasMonthNote = !!calendarData.monthNote;
+  const monthKey = `${currentMonth.getFullYear()}-${currentMonth.getMonth()}`;
+  const monthNote = calendarData.monthNotes?.[monthKey] || "";
+  const hasMonthNote = !!monthNote;
 
   useEffect(() => {
     const saved = localStorage.getItem("calendar-data");
@@ -123,7 +125,7 @@ export default function Calendar() {
                         Monthly Note
                       </h1>
                       <p className="text-white text-sm mt-1 line-clamp-2">
-                        {calendarData.monthNote}
+                        {monthNote}
                       </p>
                     </>
                   )}

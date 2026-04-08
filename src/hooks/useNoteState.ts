@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import { getDateKey, findRangeMatch } from "@/lib/utils";
 
@@ -6,6 +8,7 @@ export const useNoteState = ({
   startDate,
   endDate,
   calendarData,
+  currentMonth, 
 }: any) => {
   const [note, setNote] = useState("");
 
@@ -39,8 +42,10 @@ export const useNoteState = ({
       return;
     }
 
-    setNote(calendarData.monthNote || "");
-  }, [selectedDate, startDate, endDate, calendarData]);
+    const monthKey = `${currentMonth.getFullYear()}-${currentMonth.getMonth()}`;
+    setNote(calendarData.monthNotes?.[monthKey] || "");
+
+  }, [selectedDate, startDate, endDate, calendarData, currentMonth]);
 
   return { note, setNote };
 };

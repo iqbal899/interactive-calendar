@@ -62,7 +62,12 @@ export const useSaveNote = ({
             return;
         }
 
-        updated.monthNote = note;
+        const key = `${currentMonth.getFullYear()}-${currentMonth.getMonth()}`;
+
+        updated.monthNotes = {
+            ...updated.monthNotes,
+            [key]: note,
+        };
 
         setCalendarData({ ...updated });
         localStorage.setItem("calendar-data", JSON.stringify(updated));
