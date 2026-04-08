@@ -2,12 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Fix for shadcn */
+/* Base styles */
 @layer base {
   * {
-    @apply border-gray-200;
+    @apply border-gray-200 dark:border-gray-700;
   }
+
+  html, body {
+    @apply text-black dark:text-white;
+    min-height: 100%;
+  }
+
+  /* Light mode background */
   body {
-    @apply bg-white text-black;
+    background: linear-gradient(to bottom right, #e5e7eb, #d1d5db);
   }
+
+  /*Dark mode background */
+  html.dark body {
+    background: linear-gradient(to bottom right, #0a0f1f, #111827);
+  }
+}
+
+/* Smooth transitions */
+* {
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }

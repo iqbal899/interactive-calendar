@@ -15,12 +15,16 @@ export default function Header({
     <div className="relative flex items-center justify-between mb-6">
 
       {/* LEFT */}
-      <Button variant="outline" size="icon" onClick={onPrev}>
-        <ChevronLeft className="w-4 h-4" />
-      </Button>
-
+      <Button
+  variant="outline"
+  size="icon"
+  onClick={onPrev}
+  className="border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700"
+>
+  <ChevronLeft className="w-4 h-4 text-gray-800 dark:text-gray-200" />
+</Button>
       {/* CENTER */}
-      <h2 className="absolute left-1/2 -translate-x-1/2 text-lg font-semibold pointer-events-none">
+      <h2 className="absolute left-1/2 -translate-x-1/2 text-lg font-semibold text-gray-900 dark:text-whitepointer-events-none">
         {format(currentMonth, "MMMM yyyy")}
       </h2>
 
@@ -39,9 +43,14 @@ export default function Header({
     </Button>
   )}
 
-  <Button variant="outline" size="icon" onClick={onNext}>
-    <ChevronRight className="w-4 h-4" />
-  </Button>
+  <Button
+  variant="outline"
+  size="icon"
+  onClick={onNext}
+  className="border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700"
+>
+  <ChevronRight className="w-4 h-4 text-gray-800 dark:text-gray-200" />
+</Button>
 
 </div>
     </div>

@@ -37,12 +37,19 @@ export default function Calendar() {
   }, []);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-300 
+dark:from-[#0a0f1f] dark:to-[#111827] p-4 transition-colors">
 
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-6xl md:rounded-3xl overflow-hidden md:shadow-2xl md:bg-white md:border"
+        className="
+  w-full max-w-6xl overflow-hidden
+  md:rounded-3xl
+  bg-white dark:bg-[#0b1220]
+  shadow-lg dark:shadow-black/40
+  transition-colors
+"
       >
         <div className="grid md:grid-cols-2">
 
@@ -74,7 +81,7 @@ export default function Calendar() {
           </div>
 
           {/* CALENDAR */}
-          <div className="p-6">
+          <div className="p-6 bg-white dark:bg-gray-900 transition-colors">
             <CalendarGrid
               startDate={startDate}
               endDate={endDate}

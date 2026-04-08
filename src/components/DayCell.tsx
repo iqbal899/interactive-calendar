@@ -27,10 +27,10 @@ export default function DayCell({
     <div
       onClick={() => onClick(day)}
       className={clsx(
-        "h-12 flex items-center justify-center rounded-xl cursor-pointer transition-all duration-200 text-gray-800 relative",
-        "hover:scale-105 hover:bg-gray-200",
-        isRangeNote && "bg-blue-100",
-        inSelectedRange && "bg-blue-200",
+        "h-12 flex items-center justify-center rounded-xl cursor-pointer transition-all duration-200  text-gray-800 dark:text-gray-200 relative",
+        "hover:scale-105 hover:bg-gray-200 dark:hover:bg-gray-700",
+        isRangeNote && "bg-blue-100 dark:bg-blue-900/40",
+        inSelectedRange && "bg-blue-200 dark:bg-blue-800/50",
         isSelected && "ring-2 ring-black"
       )}
     >
