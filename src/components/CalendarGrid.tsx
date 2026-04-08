@@ -8,7 +8,6 @@ import {
   addMonths,
   subMonths,
 } from "date-fns";
-import { useState } from "react";
 import DayCell from "./DayCell";
 import Header from "./Header";
 
@@ -20,8 +19,10 @@ export default function CalendarGrid({
   setEndDate,
   setSelectedDate,
   calendarData,
+  currentMonth,   
+  setCurrentMonth, 
 }: any) {
-  const [currentMonth, setCurrentMonth] = useState(new Date());
+
 
   const days = eachDayOfInterval({
     start: startOfMonth(currentMonth),
@@ -31,20 +32,18 @@ export default function CalendarGrid({
   const handleClick = (day: Date) => {
   const key = format(day, "yyyy-MM-dd");
 
-
   const rangeMatch = calendarData.rangeNotes?.find((r: any) => {
     return key >= r.start && key <= r.end;
   });
 
   if (rangeMatch) {
-   
+
     setStartDate(new Date(rangeMatch.start));
     setEndDate(new Date(rangeMatch.end));
     setSelectedDate(day);
     return;
   }
 
- 
   setSelectedDate(day);
 
   if (!startDate || endDate) {

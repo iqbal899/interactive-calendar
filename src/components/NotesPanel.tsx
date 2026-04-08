@@ -13,7 +13,7 @@ export default function NotesPanel({
   const [note, setNote] = useState("");
 
 useEffect(() => {
-  
+
   if (startDate && endDate) {
     const found = calendarData.rangeNotes?.find(
       (r: any) =>

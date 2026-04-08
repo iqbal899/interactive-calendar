@@ -4,11 +4,15 @@ import { useState, useEffect } from "react";
 import CalendarGrid from "./CalendarGrid";
 import NotesPanel from "./NotesPanel";
 import { motion } from "framer-motion";
+import monthImages from "@/lib/monthImages";
 
 export default function Calendar() {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [currentMonth, setCurrentMonth] = useState(new Date());
+
+  const currentMonthIndex = currentMonth.getMonth();
 
   const handleMonthClick = () => {
     setSelectedDate(null);
@@ -39,24 +43,30 @@ export default function Calendar() {
 
           {/* IMAGE */}
           <div className="relative h-64 md:h-full">
-            <img
-              src="https://images.unsplash.com/photo-1773983485631-16aa04616b89?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            
+            <motion.img
+              key={currentMonthIndex}
+              src={monthImages[currentMonthIndex]}
               className="w-full h-full object-cover"
+              initial={{ opacity: 0.6, scale: 1.05 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.4 }}
             />
-            <div className="absolute inset-0 flex items-end p-6">
-  <div
-    onClick={handleMonthClick}
-    className="w-full bg-white/10 backdrop-blur-md rounded-xl p-4 cursor-pointer transition hover:bg-white/20 hover:scale-[1.02] border border-white/20"
-  >
-    <h1 className="text-white text-lg font-semibold">
-      Plan Your Month
-    </h1>
 
-    <p className="text-white/80 text-sm mt-1">
-      Click to add monthly notes
-    </p>
-  </div>
-</div>
+            {/* HEADER CARD */}
+            <div className="absolute inset-0 flex items-end p-6">
+              <div
+                onClick={handleMonthClick}
+                className="w-full bg-white/10 backdrop-blur-md rounded-xl p-4 cursor-pointer transition hover:bg-white/20 hover:scale-[1.02] border border-white/20"
+              >
+                <h1 className="text-white text-lg font-semibold">
+                  Plan Your Month
+                </h1>
+                <p className="text-white/80 text-sm mt-1">
+                  Click to add monthly notes
+                </p>
+              </div>
+            </div>
           </div>
 
           {/* CALENDAR */}
@@ -69,6 +79,8 @@ export default function Calendar() {
               setEndDate={setEndDate}
               setSelectedDate={setSelectedDate}
               calendarData={calendarData}
+              currentMonth={currentMonth}          
+              setCurrentMonth={setCurrentMonth}    
             />
           </div>
         </div>
