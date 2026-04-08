@@ -56,9 +56,9 @@ export default function NotesPanel(props: any) {
 
       {/* TEXTAREA */}
       <textarea
-        rows={1}
+        rows={2}
         placeholder={`Write your notes... (max ${MAX_CHARS} characters)`}
-        className="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white p-3 resize-none overflow-hidden focus:outline-none focus:ring-2 focus:ring-blue-100 transition-all duration-200"
+        className="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white p-3 leading-relaxed resize-none overflow-hidden min-h-[60px] focus:outline-none focus:ring-2 focus:ring-blue-100 transition-all duration-200"
         value={safeNote}
         onChange={(e) => {
           const text = e.target.value;
