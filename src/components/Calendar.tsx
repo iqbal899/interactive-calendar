@@ -21,9 +21,9 @@ export default function Calendar() {
   };
 
   const handleClearRange = () => {
-  setStartDate(null);
-  setEndDate(null);
-};
+    setStartDate(null);
+    setEndDate(null);
+  };
 
   const [calendarData, setCalendarData] = useState<any>({
     monthNote: "",
@@ -48,7 +48,7 @@ export default function Calendar() {
 
           {/* IMAGE */}
           <div className="relative h-64 md:h-full">
-            
+
             <motion.img
               key={currentMonthIndex}
               src={monthImages[currentMonthIndex]}
@@ -97,6 +97,9 @@ export default function Calendar() {
           endDate={endDate}
           calendarData={calendarData}
           setCalendarData={setCalendarData}
+          setStartDate={setStartDate}
+          setEndDate={setEndDate}
+          setSelectedDate={setSelectedDate}
         />
       </motion.div>
     </div>

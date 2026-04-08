@@ -1,44 +1,21 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { format } from "date-fns";
-import { getNoteByContext, saveNoteLogic } from "@/lib/utils";
+import { useNoteState } from "@/hooks/useNoteState";
+import { useSaveNote } from "@/hooks/useSaveNote";
+import { useDeleteNote } from "@/hooks/useDeleteNote";
 
-export default function NotesPanel({
-  selectedDate,
-  startDate,
-  endDate,
-  calendarData,
-  setCalendarData,
-}: any) {
-  const [note, setNote] = useState("");
+export default function NotesPanel(props: any) {
+  const { selectedDate, startDate, endDate } = props;
 
-  useEffect(() => {
-    const result = getNoteByContext({
-      selectedDate,
-      startDate,
-      endDate,
-      calendarData,
-    });
+  const { note, setNote } = useNoteState(props);
 
-    setNote(result);
-  }, [selectedDate, startDate, endDate, calendarData]);
+  const { saveNote } = useSaveNote({
+    ...props,
+    note,
+  });
 
-  const saveNote = () => {
-    const updated = saveNoteLogic({
-      selectedDate,
-      startDate,
-      endDate,
-      note,
-      calendarData,
-    });
-
-    setCalendarData({ ...updated });
-    localStorage.setItem("calendar-data", JSON.stringify(updated));
-
-    alert("Note saved ");
-  };
-  
+  const { deleteNote } = useDeleteNote(props);
 
   return (
     <div className="p-6 border-t bg-white">
@@ -53,29 +30,26 @@ export default function NotesPanel({
       </p>
 
       <textarea
-        ref={(el) => {
-          if (el) {
-            el.style.height = "auto";
-            el.style.height = el.scrollHeight + "px";
-          }
-        }}
-        className="w-full rounded-xl border p-3 resize-none overflow-hidden focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-        placeholder="Write your notes..."
+        className="w-full rounded-xl border p-3 resize-none overflow-hidden"
         value={note}
-        onChange={(e) => {
-          setNote(e.target.value);
-          const target = e.target as HTMLTextAreaElement;
-          target.style.height = "auto";
-          target.style.height = target.scrollHeight + "px";
-        }}
+        onChange={(e) => setNote(e.target.value)}
       />
 
-      <button
-        onClick={saveNote}
-        className="mt-3 px-5 py-2 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-500 text-white"
-      >
-        Save Note
-      </button>
+      <div className="flex gap-3 mt-3">
+        <button
+          onClick={saveNote}
+          className="px-5 py-2 rounded-xl bg-blue-500 text-white"
+        >
+          Save
+        </button>
+
+        <button
+          onClick={deleteNote}
+          className="px-5 py-2 rounded-xl bg-red-500 text-white"
+        >
+          Delete
+        </button>
+      </div>
     </div>
   );
 }
