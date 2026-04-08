@@ -12,7 +12,7 @@ export default function Header({ currentMonth, onPrev, onNext }: any) {
         <ChevronLeft className="w-4 h-4" />
       </Button>
 
-      <h2 className="text-xl font-semibold">
+      <h2 className="text-lg font-semibold">
         {format(currentMonth, "MMMM yyyy")}
       </h2>
 

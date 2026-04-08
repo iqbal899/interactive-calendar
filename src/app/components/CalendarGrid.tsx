@@ -4,11 +4,11 @@ import {
   startOfMonth,
   endOfMonth,
   eachDayOfInterval,
+  format,
   addMonths,
   subMonths,
-  format,
 } from "date-fns";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import DayCell from "./DayCell";
 import Header from "./Header";
 
@@ -19,14 +19,9 @@ export default function CalendarGrid({
   setStartDate,
   setEndDate,
   setSelectedDate,
+  calendarData,
 }: any) {
   const [currentMonth, setCurrentMonth] = useState(new Date());
-  const [notes, setNotes] = useState<any>({});
-
-  useEffect(() => {
-    const saved = localStorage.getItem("calendar-notes");
-    if (saved) setNotes(JSON.parse(saved));
-  }, []);
 
   const days = eachDayOfInterval({
     start: startOfMonth(currentMonth),
@@ -57,6 +52,14 @@ export default function CalendarGrid({
         {days.map((day: Date) => {
           const key = format(day, "yyyy-MM-dd");
 
+          const hasNote = calendarData.dateNotes?.[key];
+
+          const isRangeNote = calendarData.rangeNotes?.some((r: any) => {
+            const start = new Date(r.start);
+            const end = new Date(r.end);
+            return day >= start && day <= end;
+          });
+
           return (
             <DayCell
               key={day.toString()}
@@ -65,7 +68,8 @@ export default function CalendarGrid({
               endDate={endDate}
               selectedDate={selectedDate}
               onClick={handleClick}
-              hasNote={notes[key]}
+              hasNote={hasNote}
+              isRangeNote={isRangeNote}
             />
           );
         })}

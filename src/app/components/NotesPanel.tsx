@@ -3,45 +3,110 @@
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
 
-export default function NotesPanel({ selectedDate }: any) {
+export default function NotesPanel({
+  selectedDate,
+  startDate,
+  endDate,
+  calendarData,
+  setCalendarData,
+}: any) {
   const [note, setNote] = useState("");
-  const [allNotes, setAllNotes] = useState<any>({});
 
-  useEffect(() => {
-    const saved = localStorage.getItem("calendar-notes");
-    if (saved) setAllNotes(JSON.parse(saved));
-  }, []);
+  // Load correct note based on context
+ useEffect(() => {
+  if (startDate && endDate) {
+    // exact range editing mode
+    const found = calendarData.rangeNotes.find(
+      (r: any) =>
+        r.start === format(startDate, "yyyy-MM-dd") &&
+        r.end === format(endDate, "yyyy-MM-dd")
+    );
 
-  useEffect(() => {
-    if (!selectedDate) return;
+    setNote(found?.note || "");
+    return;
+  }
 
-    const key = format(selectedDate, "yyyy-MM-dd");
-    setNote(allNotes[key] || "");
-  }, [selectedDate, allNotes]);
+  if (selectedDate) {
+    const selectedKey = format(selectedDate, "yyyy-MM-dd");
+
+    // PRIORITY 1: CHECK RANGE
+    const rangeMatch = calendarData.rangeNotes.find((r: any) => {
+      const start = new Date(r.start);
+      const end = new Date(r.end);
+
+      return selectedDate >= start && selectedDate <= end;
+    });
+
+    if (rangeMatch) {
+      setNote(rangeMatch.note);
+      return;
+    }
+
+    // PRIORITY 2: CHECK SINGLE DATE
+    if (calendarData.dateNotes[selectedKey]) {
+      setNote(calendarData.dateNotes[selectedKey]);
+      return;
+    }
+
+    // DEFAULT
+    setNote("");
+    return;
+  }
+
+  //  MONTH NOTE
+  setNote(calendarData.monthNote || "");
+}, [selectedDate, startDate, endDate, calendarData]);
 
   const saveNote = () => {
-    if (!selectedDate) return;
+    console.log("Saving note...", {
+      selectedDate,
+      startDate,
+      endDate,
+      note,
+    });
 
-    const key = format(selectedDate, "yyyy-MM-dd");
+    let updated = { ...calendarData };
 
-    const updated = {
-      ...allNotes,
-      [key]: note,
-    };
+    if (startDate && endDate) {
+      const range = {
+        start: format(startDate, "yyyy-MM-dd"),
+        end: format(endDate, "yyyy-MM-dd"),
+        note,
+      };
 
-    setAllNotes(updated);
-    localStorage.setItem("calendar-notes", JSON.stringify(updated));
+      updated.rangeNotes = [
+        ...updated.rangeNotes.filter(
+          (r: any) =>
+            !(r.start === range.start && r.end === range.end)
+        ),
+        range,
+      ];
+    } else if (selectedDate) {
+      const key = format(selectedDate, "yyyy-MM-dd");
+      updated.dateNotes[key] = note;
+    } else {
+      updated.monthNote = note;
+    }
+
+    // CRITICAL FIX
+    setCalendarData(updated);
+
+    localStorage.setItem("calendar-data", JSON.stringify(updated));
+
+    alert("Note saved ");
   };
 
   return (
     <div className="p-6 border-t bg-white">
       <h3 className="text-lg font-semibold mb-2">Notes</h3>
 
-      {selectedDate && (
-        <p className="text-sm text-gray-500 mb-2">
-          {format(selectedDate, "dd MMM yyyy")}
-        </p>
-      )}
+      <p className="text-sm text-gray-500 mb-2">
+        {startDate && endDate
+          ? `Range: ${format(startDate, "dd MMM")} → ${format(endDate, "dd MMM")}`
+          : selectedDate
+          ? `Date: ${format(selectedDate, "dd MMM yyyy")}`
+          : "Monthly Notes"}
+      </p>
 
       <textarea
         className="w-full rounded-xl border p-3"

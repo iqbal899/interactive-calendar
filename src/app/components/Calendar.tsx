@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CalendarGrid from "./CalendarGrid";
 import NotesPanel from "./NotesPanel";
 import { motion } from "framer-motion";
@@ -9,6 +9,18 @@ export default function Calendar() {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+
+ 
+  const [calendarData, setCalendarData] = useState<any>({
+    monthNote: "",
+    dateNotes: {},
+    rangeNotes: [],
+  });
+
+  useEffect(() => {
+    const saved = localStorage.getItem("calendar-data");
+    if (saved) setCalendarData(JSON.parse(saved));
+  }, []);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-300 p-4">
@@ -42,11 +54,19 @@ export default function Calendar() {
               setStartDate={setStartDate}
               setEndDate={setEndDate}
               setSelectedDate={setSelectedDate}
+              calendarData={calendarData} 
             />
           </div>
         </div>
 
-        <NotesPanel selectedDate={selectedDate} />
+        {/* NOTES */}
+        <NotesPanel
+          selectedDate={selectedDate}
+          startDate={startDate}
+          endDate={endDate}
+          calendarData={calendarData} 
+          setCalendarData={setCalendarData} 
+        />
       </motion.div>
     </div>
   );
