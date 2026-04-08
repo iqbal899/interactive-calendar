@@ -48,7 +48,7 @@ export default function NotesPanel(props: any) {
 
       <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">
         {startDate && endDate
-          ? `Range: ${format(startDate, "dd MMM")} → ${format(endDate, "dd MMM")}`
+          ? `Range: ${format(startDate, "dd MMM")} - ${format(endDate, "dd MMM")}`
           : selectedDate
             ? `Date: ${format(selectedDate, "dd MMM yyyy")}`
             : "Monthly Notes"}

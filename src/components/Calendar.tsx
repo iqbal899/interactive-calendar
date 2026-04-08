@@ -78,8 +78,19 @@ export default function Calendar() {
                       className="bg-black/50 backdrop-blur-md text-white rounded-lg p-3 h-[90px] flex flex-col justify-between border border-white/10 shadow-md"
                     >
                       <p className="text-[10px] opacity-70">
-                        {item.date.getDate()}{" "}
-                        {item.date.toLocaleString("default", { month: "short" })}
+                        {item.type === "range" ? (
+                          <>
+                            {item.start.getDate()}{" "}
+                            {item.start.toLocaleString("default", { month: "short" })} - {" "}
+                            {item.end.getDate()}{" "}
+                            {item.end.toLocaleString("default", { month: "short" })}
+                          </>
+                        ) : (
+                          <>
+                            {item.date.getDate()}{" "}
+                            {item.date.toLocaleString("default", { month: "short" })}
+                          </>
+                        )}
                       </p>
 
                       <p className="text-xs line-clamp-3">
