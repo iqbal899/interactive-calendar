@@ -29,16 +29,32 @@ export default function CalendarGrid({
   });
 
   const handleClick = (day: Date) => {
-    setSelectedDate(day);
+  const key = format(day, "yyyy-MM-dd");
 
-    if (!startDate || endDate) {
-      setStartDate(day);
-      setEndDate(null);
-    } else {
-      if (day < startDate) setStartDate(day);
-      else setEndDate(day);
-    }
-  };
+
+  const rangeMatch = calendarData.rangeNotes?.find((r: any) => {
+    return key >= r.start && key <= r.end;
+  });
+
+  if (rangeMatch) {
+   
+    setStartDate(new Date(rangeMatch.start));
+    setEndDate(new Date(rangeMatch.end));
+    setSelectedDate(day);
+    return;
+  }
+
+ 
+  setSelectedDate(day);
+
+  if (!startDate || endDate) {
+    setStartDate(day);
+    setEndDate(null);
+  } else {
+    if (day < startDate) setStartDate(day);
+    else setEndDate(day);
+  }
+};
 
   return (
     <div>
@@ -50,15 +66,13 @@ export default function CalendarGrid({
 
       <div className="grid grid-cols-7 gap-2">
         {days.map((day: Date) => {
-          const key = format(day, "yyyy-MM-dd");
+           const key = format(day, "yyyy-MM-dd");
 
-          const hasNote = calendarData.dateNotes?.[key];
+  const hasNote = calendarData.dateNotes?.[key]; 
 
-          const isRangeNote = calendarData.rangeNotes?.some((r: any) => {
-            const start = new Date(r.start);
-            const end = new Date(r.end);
-            return day >= start && day <= end;
-          });
+  const isRangeNote = calendarData.rangeNotes?.some((r: any) => {
+    return key >= r.start && key <= r.end; 
+  });
 
           return (
             <DayCell

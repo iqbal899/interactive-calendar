@@ -12,11 +12,10 @@ export default function NotesPanel({
 }: any) {
   const [note, setNote] = useState("");
 
-  // Load correct note based on context
- useEffect(() => {
+useEffect(() => {
+  
   if (startDate && endDate) {
-    // exact range editing mode
-    const found = calendarData.rangeNotes.find(
+    const found = calendarData.rangeNotes?.find(
       (r: any) =>
         r.start === format(startDate, "yyyy-MM-dd") &&
         r.end === format(endDate, "yyyy-MM-dd")
@@ -29,31 +28,24 @@ export default function NotesPanel({
   if (selectedDate) {
     const selectedKey = format(selectedDate, "yyyy-MM-dd");
 
-    // PRIORITY 1: CHECK RANGE
-    const rangeMatch = calendarData.rangeNotes.find((r: any) => {
-      const start = new Date(r.start);
-      const end = new Date(r.end);
-
-      return selectedDate >= start && selectedDate <= end;
-    });
+const rangeMatch = calendarData.rangeNotes?.find((r: any) => {
+  return selectedKey >= r.start && selectedKey <= r.end;
+});
 
     if (rangeMatch) {
       setNote(rangeMatch.note);
       return;
     }
 
-    // PRIORITY 2: CHECK SINGLE DATE
-    if (calendarData.dateNotes[selectedKey]) {
+    if (calendarData.dateNotes?.[selectedKey]) {
       setNote(calendarData.dateNotes[selectedKey]);
       return;
     }
 
-    // DEFAULT
     setNote("");
     return;
   }
 
-  //  MONTH NOTE
   setNote(calendarData.monthNote || "");
 }, [selectedDate, startDate, endDate, calendarData]);
 
@@ -88,8 +80,7 @@ export default function NotesPanel({
       updated.monthNote = note;
     }
 
-    // CRITICAL FIX
-    setCalendarData(updated);
+    setCalendarData({ ...updated });
 
     localStorage.setItem("calendar-data", JSON.stringify(updated));
 
