@@ -15,7 +15,6 @@ import {
   checkIsRangeNote,
   findRangeMatch,
 } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 
 export default function CalendarGrid({
   startDate,
@@ -27,7 +26,6 @@ export default function CalendarGrid({
   calendarData,
   currentMonth,
   setCurrentMonth,
-  onClearRange,
 }: any) {
 
   const days = eachDayOfInterval({
@@ -66,18 +64,6 @@ export default function CalendarGrid({
         onNext={() => setCurrentMonth(addMonths(currentMonth, 1))}
       />
 
-      {startDate && endDate && (
-        <div className="mb-4 flex justify-end">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={onClearRange}
-            className=" rounded-xl border-red-400 text-red-600 hover:bg-red-100"
-          >
-            Clear Range
-          </Button>
-        </div>
-      )}
       <div className="grid grid-cols-7 gap-2">
         {days.map((day: Date) => {
           const key = getDateKey(day);

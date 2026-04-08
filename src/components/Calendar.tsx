@@ -37,12 +37,12 @@ export default function Calendar() {
   }, []);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-300 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br p-4">
 
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-6xl rounded-3xl overflow-hidden shadow-2xl bg-white border"
+        className="w-full max-w-6xl md:rounded-3xl overflow-hidden md:shadow-2xl md:bg-white md:border"
       >
         <div className="grid md:grid-cols-2">
 
@@ -85,7 +85,6 @@ export default function Calendar() {
               calendarData={calendarData}
               currentMonth={currentMonth}
               setCurrentMonth={setCurrentMonth}
-              onClearRange={handleClearRange}
             />
           </div>
         </div>
@@ -100,6 +99,7 @@ export default function Calendar() {
           setStartDate={setStartDate}
           setEndDate={setEndDate}
           setSelectedDate={setSelectedDate}
+          onClearRange={handleClearRange}
         />
       </motion.div>
     </div>

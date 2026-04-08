@@ -6,7 +6,7 @@ import { useSaveNote } from "@/hooks/useSaveNote";
 import { useDeleteNote } from "@/hooks/useDeleteNote";
 
 export default function NotesPanel(props: any) {
-  const { selectedDate, startDate, endDate } = props;
+  const { selectedDate, startDate, endDate  , onClearRange} = props;
 
   const { note, setNote } = useNoteState(props);
 
@@ -49,6 +49,16 @@ export default function NotesPanel(props: any) {
         >
           Delete
         </button>
+
+        {startDate && endDate && (
+    <button
+      onClick={onClearRange}
+      className="px-5 py-2 rounded-xl bg-gray-300 text-gray-800 hover:bg-gray-400"
+    >
+      Clear Range
+    </button>
+  )}
+
       </div>
     </div>
   );
